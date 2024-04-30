@@ -37,6 +37,14 @@ func OptionPrefix(x string) Option {
 	}
 }
 
+func OptionPrefixWithAnsiEscape(x string) Option {
+	return func(p *Prompt) error {
+		p.renderer.prefix = x
+		p.renderer.allowPrefixAnsiEscape = true
+		return nil
+	}
+}
+
 // OptionInitialBufferText to set the initial buffer text
 func OptionInitialBufferText(x string) Option {
 	return func(p *Prompt) error {
@@ -57,6 +65,14 @@ func OptionCompletionWordSeparator(x string) Option {
 func OptionLivePrefix(f func() (prefix string, useLivePrefix bool)) Option {
 	return func(p *Prompt) error {
 		p.renderer.livePrefixCallback = f
+		return nil
+	}
+}
+
+func OptionLivePrefixWithAnsiEscape(f func() (prefix string, useLivePrefix bool)) Option {
+	return func(p *Prompt) error {
+		p.renderer.livePrefixCallback = f
+		p.renderer.allowPrefixAnsiEscape = true
 		return nil
 	}
 }
