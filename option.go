@@ -1,5 +1,7 @@
 package prompt
 
+import "fmt"
+
 // Option is the type to replace default parameters.
 // prompt.New accepts any number of options (this is functional option pattern).
 type Option func(prompt *Prompt) error
@@ -278,6 +280,23 @@ func OptionBreakLineCallback(fn func(*Document)) Option {
 func OptionSetExitCheckerOnInput(fn ExitChecker) Option {
 	return func(p *Prompt) error {
 		p.exitChecker = fn
+		return nil
+	}
+}
+
+func OptionHistorySize(size int) Option {
+	return func(p *Prompt) error {
+		if size < 0 {
+			return fmt.Errorf("history size should be greater than or equal to 0, but got %d", size)
+		}
+		p.history.size = size
+		return nil
+	}
+}
+
+func OptionParseBashStyleHistoryNumber() Option {
+	return func(p *Prompt) error {
+		(*p).bShouldParseBashStyleHistoryNumber = true
 		return nil
 	}
 }
